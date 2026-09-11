@@ -1,0 +1,26 @@
+{
+  "name": "salon-crm-backend",
+  "version": "1.0.0",
+  "description": "Salon CRM Backend - Node.js Express API with MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js --watch",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@fingerprint/agent": "^4.1.5",
+    "axios": "^1.18.1",
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.3.0",
+    "cloudinary": "^2.11.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "form-data": "^4.0.6",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.5.0",
+    "mongoose": "^9.7.4",
+    "multer": "^2.3.0",
+    "nodemon": "^3.1.14"
+  }
+}
