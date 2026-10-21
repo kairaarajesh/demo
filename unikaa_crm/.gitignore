@@ -1,7 +1,22 @@
-  /node_modules
-.DS_Store
-*.pem
+# Dependencies
+node_modules/
+
+# Next.js build output (This stops the 100MB error)
+.next/
+out/
+
+# Production
+/build
+
+# Environment variables
+.env
+.env*.local
+
+# Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.env*.local
+
+# OS files
+.DS_Store
+*.pem
