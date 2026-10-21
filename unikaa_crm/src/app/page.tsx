@@ -74,7 +74,9 @@ const PERMISSION_MODULES = [
   'clients',
   'appointments',
   'transactions',
-  'billing'
+  'billing',
+  'clients_message',
+  'tproducts'
 ];
 
 
@@ -679,7 +681,6 @@ function RegisterPage({ onClose }: { onClose: () => void }) {
     </div>
   );
 }
-
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -2260,10 +2261,10 @@ const handleExportClients = () => {
               </div>
             )}
 
-             <div>
+             {/* <div>
               <Label>M_Card</Label>
               <Input type="text" value={form.membership_card || ''} onChange={(e) => setForm({ ...form, membership_card: e.target.value })} />
-            </div>
+            </div> */}
 
             <div>
               <Label>Membership Validity</Label>
@@ -2295,131 +2296,166 @@ const handleExportClients = () => {
     {/* View Membership Card Client Dialog */}
 
 <Dialog open={!!viewClient} onOpenChange={(open) => !open && setViewClient(null)}>
-  <DialogContent className="max-w-[640px] w-[94vw] p-3 sm:p-4 bg-transparent border-0 shadow-none">
-    {/* ===== CARD (captured as image) ===== */}
+  <DialogContent className="w-[94vw] max-w-[850px] border-0 bg-transparent p-2 shadow-none sm:p-3">
     <div
       ref={cardRef}
-      className="relative w-full overflow-hidden rounded-[28px] text-white"
+      className="relative w-full overflow-hidden rounded-[18px] text-white"
       style={{
-        aspectRatio: '1581 / 995',
-        background:
-          'radial-gradient(ellipse at 70% 0%, #0a8a93 0%, rgba(10,138,147,0) 45%), linear-gradient(135deg, #0b5a5e 0%, #064a4e 45%, #03292d 100%)',
-        border: '2px solid #d4a72c',
-        boxShadow: '0 20px 50px rgba(0,0,0,0.35)',
-        fontFamily: "'Montserrat', 'Poppins', system-ui, sans-serif",
+        aspectRatio: "5 / 3",
+        containerType: "inline-size",
+        fontFamily: "'Montserrat', Arial, sans-serif",
       }}
     >
-      {/* Gold swooshes */}
-      <svg
-        className="absolute inset-0 w-full h-full"
-        viewBox="0 0 1581 995"
-        preserveAspectRatio="none"
-        aria-hidden="true"
+      {/* Background: logo and gold design */}
+      <img
+        src="https://res.cloudinary.com/e3jbzpxf/image/upload/v1792042969/memberImage.jpg"
+        alt="Unikaa Beauty Salon"
+        crossOrigin="anonymous"
+        className="absolute inset-0 h-full w-full object-fill"
+      />
+
+      {/* Membership number */}
+      <div
+        className="absolute left-[4%] top-[39%] z-10"
+        style={{ width: "34%" }}
       >
-        <defs>
-          <linearGradient id="goldA" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#8a5a12" />
-            <stop offset="50%" stopColor="#ffe27a" />
-            <stop offset="100%" stopColor="#b9801f" />
-          </linearGradient>
-          <linearGradient id="goldB" x1="0" y1="1" x2="1" y2="0">
-            <stop offset="0%" stopColor="#b9801f" />
-            <stop offset="55%" stopColor="#ffe27a" />
-            <stop offset="100%" stopColor="#8a5a12" />
-          </linearGradient>
-        </defs>
-
-        {/* top-left dark circle + ribbon */}
-        <path d="M0 0 H300 Q200 200 0 260 Z" fill="#04383c" opacity="0.7" />
-        <path d="M380 0 H480 Q330 260 0 372 V345 Q250 270 380 0 Z" fill="url(#goldA)" />
-        <path d="M0 365 Q330 300 480 0" fill="none" stroke="#ffe27a" strokeWidth="3" opacity="0.9" />
-
-        {/* bottom-right dark circle + ribbon */}
-        <path d="M1581 470 Q1250 560 1040 995 H1581 Z" fill="#04383c" opacity="0.65" />
-        <path d="M1581 340 Q1250 400 1030 760 Q960 900 720 975 L860 975 Q1050 900 1110 790 Q1300 460 1581 360 Z" fill="url(#goldB)" />
-        <path d="M1581 470 Q1330 520 1150 740" fill="none" stroke="#12a3a8" strokeWidth="2" opacity="0.6" />
-      </svg>
-
-      {/* Logo (centered) - Adjusted size slightly for better fit */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-[7%] w-[28%]">
-        <img
-          src="https://res.cloudinary.com/e3jbzpxf/image/upload/v1790834070/unikaalogo.png"
-          alt="Unikaa Beauty Salon"
-          crossOrigin="anonymous"
-          className="w-full h-auto object-contain"
-        />
+        <p
+          className="mb-[2%] font-semibold uppercase tracking-[0.12em] leading-tight"
+          style={{ fontSize: "clamp(8px, 1.15cqw, 16px)" }}
+        >
+          Membership Card No
+        </p>
+        <p
+          className="font-bold leading-none tracking-wide"
+          style={{
+            fontSize: "clamp(15px, 3.1cqw, 42px)",
+            overflowWrap: "anywhere",
+          }}
+        >
+          {viewClient?.membership_card || "XXXXXXXX"}
+        </p>
       </div>
 
-      <div className="absolute bottom-[7%] left-[5.5%] right-[5.5%] flex justify-between items-end gap-4">
-        {/* Left column */}
-        <div className="flex flex-col gap-3 max-w-[55%]">
-          <div>
-            <p className="text-[10px] sm:text-xs tracking-[0.2em] text-amber-200/90 uppercase mb-1">
-              Membership Card No.
-            </p>
-            <p className="text-lg sm:text-2xl md:text-3xl font-medium tracking-[0.1em] leading-tight">
-              {viewClient?.membership_card || 'XXXXXXXXXXXX'}
-            </p>
-          </div>
+      {/* Name */}
+      <div
+        className="absolute left-[4%] top-[57%] z-10"
+        style={{ width: "34%" }}
+      >
+        <p
+          className="mb-[2%] font-semibold uppercase tracking-[0.15em]"
+          style={{ fontSize: "clamp(8px, 1.15cqw, 16px)" }}
+        >
+          Name
+        </p>
+        <p
+          className="font-extrabold uppercase leading-tight"
+          style={{
+            fontSize: "clamp(14px, 2.6cqw, 34px)",
+            overflowWrap: "anywhere",
+          }}
+        >
+          {viewClient?.name || "N/A"}
+        </p>
+      </div>
 
-          <div className="flex gap-6">
-            <div>
-              <p className="text-[10px] sm:text-xs tracking-[0.2em] text-amber-200/90 uppercase mb-1">
-                Name
-              </p>
-              <p className="text-base sm:text-xl md:text-2xl font-extrabold uppercase leading-tight">
-                {viewClient?.name || 'N/A'}
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-6">
-            <div>
-              <p className="text-[10px] sm:text-xs tracking-[0.2em] text-amber-200/90 uppercase mb-1">
-                Phone
-              </p>
-              <p className="text-sm sm:text-lg md:text-xl font-bold">
-                {viewClient?.phone || 'N/A'}
-              </p>
-            </div>
-          </div>
+      {/* Phone */}
+      <div
+        className="absolute left-[4%] top-[76%] z-10"
+        style={{ width: "36%" }}
+      >
+        <p
+          className="mb-[2%] font-semibold uppercase tracking-[0.15em]"
+          style={{ fontSize: "clamp(8px, 1.15cqw, 16px)" }}
+        >
+          Phone
+        </p>
+        <p
+          className="font-bold leading-tight"
+          style={{
+            fontSize: "clamp(12px, 2.3cqw, 30px)",
+            overflowWrap: "anywhere",
+          }}
+        >
+          {viewClient?.phone || "N/A"}
+        </p>
+      </div>
+
+      {/* Status */}
+      <div className="absolute right-[4%] top-[52%] z-10 flex w-[22%] flex-col items-center">
+        <div
+          className="mb-[8%] flex items-center justify-center gap-1 font-semibold uppercase tracking-[0.12em]"
+          style={{ fontSize: "clamp(8px, 1.2cqw, 16px)" }}
+        >
+          <svg
+            viewBox="0 0 24 18"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            className="w-[1.5em]"
+            aria-hidden="true"
+          >
+            <rect x="1.5" y="1.5" width="21" height="15" rx="3" />
+            <path d="M1.5 6.5h21" />
+          </svg>
+          Status
         </div>
 
-        {/* Right column */}
-        <div className="flex flex-col items-end gap-4 max-w-[40%]">
-          {/* Status */}
-          <div className="flex flex-col items-end">
-            <div className="flex items-center gap-2 text-[10px] sm:text-xs tracking-[0.2em] uppercase text-amber-200/90">
-              <svg width="16" height="12" viewBox="0 0 24 18" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <rect x="1.5" y="1.5" width="21" height="15" rx="3" />
-                <path d="M1.5 6.5h21" />
-              </svg>
-              Status
-            </div>
-            <span
-              className="mt-2 px-4 py-1.5 rounded-full text-xs sm:text-sm md:text-base font-extrabold uppercase tracking-wide text-white"
-              style={{ background: '#12b856', boxShadow: '0 4px 14px rgba(18,184,86,0.45)' }}
-            >
-              {viewClient?.status || 'Active'}
-            </span>
-          </div>
+        <span
+          className="w-full rounded-full px-1 py-[7%] text-center font-extrabold uppercase leading-tight text-white"
+          style={{
+            background: "#12b856",
+            boxShadow: "0 4px 14px rgba(18,184,86,.35)",
+            fontSize: "clamp(9px, 1.8cqw, 23px)",
+          }}
+        >
+          {viewClient?.status || "Active"}
+        </span>
+      </div>
 
-          {/* Dates */}
-          <div className="flex items-center gap-4 text-right">
-            <div>
-              <p className="text-[9px] sm:text-[10px] tracking-wide uppercase text-amber-200/90 mb-1">Member Since</p>
-              <p className="text-[11px] sm:text-sm md:text-base font-bold">
-                {viewClient?.createdAt ? new Date(viewClient.createdAt).toLocaleDateString('en-GB') : 'N/A'}
-              </p>
-            </div>
-            {/* Vertical Divider */}
-            <div className="w-px h-8 bg-amber-400/50" />
-            <div>
-              <p className="text-[9px] sm:text-[10px] tracking-wide uppercase text-amber-200/90 mb-1">Valid Thru</p>
-              <p className="text-[11px] sm:text-sm md:text-base font-bold">
-                {viewClient?.expiredDate || 'N/A'}
-              </p>
-            </div>
-          </div>
+      {/* Membership dates */}
+      <div
+        className="absolute bottom-[8%] right-[4%] z-10 grid items-center text-center"
+        style={{
+          width: "45%",
+          gridTemplateColumns: "1fr 1px 1fr",
+          columnGap: "3%",
+        }}
+      >
+        {/* Member since */}
+        <div className="min-w-0">
+          <p
+            className="mb-[5%] font-semibold uppercase tracking-[0.08em] leading-tight"
+            style={{ fontSize: "clamp(7px, 1.05cqw, 14px)" }}
+          >
+            Member Since
+          </p>
+          <p
+            className="whitespace-nowrap font-bold leading-tight"
+            style={{ fontSize: "clamp(9px, 1.8cqw, 23px)" }}
+          >
+            {viewClient?.createdAt
+              ? new Date(viewClient.createdAt).toLocaleDateString("en-GB")
+              : "N/A"}
+          </p>
+        </div>
+
+        {/* Gold divider */}
+        <div className="h-[2.8em] bg-amber-400/80" />
+
+        {/* Valid through */}
+        <div className="min-w-0">
+          <p
+            className="mb-[5%] font-semibold uppercase tracking-[0.08em] leading-tight"
+            style={{ fontSize: "clamp(7px, 1.05cqw, 14px)" }}
+          >
+            Valid Thru
+          </p>
+          <p
+            className="whitespace-nowrap font-bold leading-tight"
+            style={{ fontSize: "clamp(9px, 1.8cqw, 23px)" }}
+          >
+            {viewClient?.expiredDate || "N/A"}
+          </p>
         </div>
       </div>
     </div>
@@ -2729,7 +2765,6 @@ const quillModules = {
   ]
 };
 
-
 function ClientsMessageModule() {
   const [clients, setClients] = useState<any[]>([]);
   const [selectedClientIds, setSelectedClientIds] = useState<string[]>([]);
@@ -2999,7 +3034,6 @@ function ClientsMessageModule() {
     </div>
   );
 }
-
 
 
 function BillModule() {
